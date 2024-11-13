@@ -130,6 +130,17 @@ def agent_factory(
             provider=args.model_provider,
             temperature=args.temperature,
         )
+    elif args.agent_strategy == "custom":
+        # native tool calling
+        from tau_bench.agents.custom_tool_calling_agent import CustomToolCallingAgent
+
+        return CustomToolCallingAgent(
+            tools_info=tools_info,
+            wiki=wiki,
+            model=args.model,
+            provider=args.model_provider,
+            temperature=args.temperature,
+        )
     elif args.agent_strategy == "act":
         # `act` from https://arxiv.org/abs/2210.03629
         from tau_bench.agents.chat_react_agent import ChatReActAgent
@@ -226,7 +237,7 @@ def main():
         "--agent-strategy",
         type=str,
         default="tool-calling",
-        choices=["tool-calling", "act", "react"],
+        choices=["tool-calling", "act", "react", "custom"],
     )
     parser.add_argument(
         "--temperature",
